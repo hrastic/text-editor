@@ -5,5 +5,5 @@ from location.location import Location
 class CursorObserver(ABC):
 
   @abstractmethod
-  def updateCursorLocation(loc: Location) -> None:
+  def updateCursorLocation(self, loc: Location) -> None:
     pass

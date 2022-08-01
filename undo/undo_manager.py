@@ -26,6 +26,10 @@ class UndoManager(metaclass=SingletonMetaType):
 
   def dettach(self, observer: UndoManagerObserver):
     self._undoManagerObservers.remove(observer)
+  
+  def notify(self):
+    for observer in self._undoManagerObservers:
+      observer.updateActionStack()
 
   def __init__(self) -> None:
     self._undoStack = Stack()
@@ -35,13 +39,17 @@ class UndoManager(metaclass=SingletonMetaType):
     naredba = self._undoStack.pop()
     self._redoStack.push(naredba)
     naredba.executeUndo()
+    self.notify()
 
   def redo(self):
     naredba = self._redoStack.pop()
     naredba.executeDo()
     self._undoStack.push(naredba)
+    self.notify()
   
   def push(self, c):
     self._redoStack.clear()
     self._undoStack.push(c)
+    self.notify()
+    
 
